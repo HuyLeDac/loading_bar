@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:ffi' as ffi;
-import 'dart:io' show Platform, Directory;
-import 'package:path/path.dart' as path;
+import 'package:loading_bar/loadingDialog.dart';
+//import 'dart:ffi' as ffi;
+//import 'dart:io' show Platform, Directory;
+//import 'package:path/path.dart' as path;
+
 
 void main() {
   runApp(const MaterialApp(
@@ -17,30 +19,103 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
 
       appBar: AppBar(
-        title: const Text('HomeScreen'),
+        title: const Text('ObjectBrowser'),
       ),
 
       body: Column(
         children: <Widget>[ 
-          // Load button, add other buttons later 
-          ElevatedButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const LoadingDialog(); // Show loading dialog when button is pressed
-                },
-              );
-            },
-            child: const Text('Load CNC objects'),
-          ),
-
-          // Two columns, one for tree and one for table which should illustrate all objects
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Row(
+            // Load button, add other buttons later 
             children: <Widget>[
-              Text('Tree'), //Tree dummy, implement Tree with flutter_fancy_tree_view
-              , // Table dummy
+              ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const LoadingDialog(); // Show loading dialog when button is pressed
+                    },
+                  );
+                },
+                child: const Text('Load CNC objects'),
+              ),
+
+              ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const LoadingDialog(); // Show loading dialog when button is pressed
+                    },
+                  );
+                },
+                child: const Text('Modify DLL paths'),
+              ),
+
+              ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const LoadingDialog(); // Show loading dialog when button is pressed
+                    },
+                  );
+                },
+                child: const Text('...'),
+              ),
+            ]
+
+          ),
+          
+          // Two columns, one for tree and one for table which should illustrate all objects
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              const Card(
+                child: Text('Tree'), //Tree dummy, implement Tree with flutter_fancy_tree_view,
+              ),
+
+              const VerticalDivider(
+                color: Colors.black,  //color of divider
+                width: 10, //width space of divider
+                thickness: 3, //thickness of divier line
+                indent: 10, //Spacing at the top of divider.
+                endIndent: 10, //Spacing at the bottom of divider. 
+              ),
+
+              Card(
+                child: Column( // Table dummy, use DataTable
+                  children: <Widget>[
+                    const Text('Table'), 
+                    DataTable(  
+                      columns: const [
+                        DataColumn(
+                          label: Text('Address:'),
+                        ),
+                        DataColumn(
+                          label: Text('Name'),
+                        ),
+                        DataColumn(
+                          label: Text('Value:'),
+                        ),
+                      ], 
+                      rows: const [        
+                        DataRow(cells: [
+                          DataCell(Text('1180416')),
+                          DataCell(Text('cycle time')),
+                          DataCell(Text('5644645')),
+                        ]),
+                        DataRow(cells: [
+                          DataCell(Text('1180416')),
+                          DataCell(Text('cycle time')),
+                          DataCell(Text('5644645')),
+                        ])
+                      ],
+                    ),
+                  ]
+                ),
+              ),
+
+              
             ],
           )
         ]
@@ -49,88 +124,3 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class LoadingDialog extends StatefulWidget {
-  const LoadingDialog({Key? key}) : super(key: key);
-
-  @override
-  _LoadingDialogState createState() => _LoadingDialogState();
-}
-
-class _LoadingDialogState extends State<LoadingDialog> {
-  double _progressValue = 0.0;
-  bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadData();
-  }
-
-  // Simulate loading data
-  void _loadData() {
-    setState(() {
-      _isLoading = true;
-      _progressValue = 0.0; // Reset progress value
-    });
-
-    const int totalSteps = 100;
-    const int delayMilliseconds = 50; // Adjust the delay time as needed
-
-    // TODO: Create a typedef with the FFI type signature of the C function.
-     
-    // TODO: Create a typedef for the variable that you'll use when calling the C function.
-
-
-    // create variables that contain paths to DLL
-    String serverPath = 'C:/cnc_objects_test_dll/x64/Debug/ob_test_dll.dll'; //enter path
-    var testServerPath = path.join(serverPath);
-    String objTestPath = 'C:/cnc_objects_test_dll/x64/Debug/test_server.dll'; //enter path
-    var objTestDllPath = path.join(objTestPath);
-
-    //Open dynamic library that contains C functions
-    final dylibTestServer = ffi.DynamicLibrary.open(testServerPath);
-    final dylibObjTestDll = ffi.DynamicLibrary.open(objTestDllPath); 
-
-  
-   
-
-
-
-    //simulate 
-    for (int i = 0; i <= totalSteps; i++) {
-      Future.delayed(Duration(milliseconds: i * delayMilliseconds), () {
-        setState(() {
-          _progressValue = i / totalSteps;
-        });
-      });
-    }
-
-    // Simulate loading completion
-    Future.delayed(const Duration(milliseconds: (totalSteps + 1) * delayMilliseconds), () {
-      Navigator.of(context).pop(); // Close dialog when loading is completed
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      child: Container(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            LinearProgressIndicator(
-              value: _progressValue,
-              minHeight: 10,
-            ),
-            const SizedBox(height: 20),
-            if (_isLoading)
-              const Text('Loading...')
-            else
-              const Text('Loading complete'), // Show completion message when loading is complete
-          ],
-        ),
-      ),
-    );
-  }
-}
