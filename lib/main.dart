@@ -89,13 +89,28 @@ class HomeScreen extends StatelessWidget {
                     DataTable(  
                       columns: const [
                         DataColumn(
-                          label: Text('Address:'),
+                          label: Text('Nr:'),
                         ),
                         DataColumn(
-                          label: Text('Name'),
+                          label: Text('Gruppe'),
                         ),
                         DataColumn(
-                          label: Text('Value:'),
+                          label: Text('Offset:'),
+                        ),
+                        DataColumn(
+                          label: Text('Bezeichner:'),
+                        ),
+                        DataColumn(
+                          label: Text('Datentyp:'),
+                        ),
+                        DataColumn(
+                          label: Text('Länge:'),
+                        ),
+                        DataColumn(
+                          label: Text('Einheit:'),
+                        ),
+                        DataColumn(
+                          label: Text('Wert:'),
                         ),
                       ], 
                       rows: const [        
@@ -103,11 +118,21 @@ class HomeScreen extends StatelessWidget {
                           DataCell(Text('1180416')),
                           DataCell(Text('cycle time')),
                           DataCell(Text('5644645')),
+                          DataCell(Text('1180416')),
+                          DataCell(Text('cycle time')),
+                          DataCell(Text('5644645')),
+                          DataCell(Text('1180416')),
+                          DataCell(Text('cycle time')),
                         ]),
                         DataRow(cells: [
                           DataCell(Text('1180416')),
                           DataCell(Text('cycle time')),
                           DataCell(Text('5644645')),
+                          DataCell(Text('1180416')),
+                          DataCell(Text('cycle time')),
+                          DataCell(Text('5644645')),
+                          DataCell(Text('1180416')),
+                          DataCell(Text('cycle time')),
                         ])
                       ],
                     ),
