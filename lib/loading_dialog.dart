@@ -4,6 +4,14 @@ import 'dart:ffi';
 import 'dart:io' show Platform, Directory;
 import 'package:path/path.dart' as path;
 
+
+// TODO: Create a typedef with the FFI type signature of the C function.
+typedef PortOpenNative = Int64 Function();
+// TODO: Create a typedef for the variable that you'll use when calling the C function.
+typedef PortOpen = int Function();
+
+
+
 class LoadingDialog extends StatefulWidget {
   const LoadingDialog({Key? key}) : super(key: key);
 
@@ -12,9 +20,10 @@ class LoadingDialog extends StatefulWidget {
 }
 
 class _LoadingDialogState extends State<LoadingDialog> {
+  
   double _progressValue = 0.0;
   bool _isLoading = false;
-
+  
   @override
   void initState() {
     super.initState();
@@ -30,27 +39,7 @@ class _LoadingDialogState extends State<LoadingDialog> {
 
     const int totalSteps = 100;
     const int delayMilliseconds = 50; // Adjust the delay time as needed
-
-    // TODO: Create a typedef with the FFI type signature of the C function.
-   
-    // TODO: Create a typedef for the variable that you'll use when calling the C function.
-
-
-    // create variables that contain paths to DLL
-    String serverPath = 'C:/cnc_objects_test_dll/x64/Debug/ob_test_dll.dll'; //enter path
-    var testServerPath = path.join(serverPath);
-
-    String objTestPath = 'C:/cnc_objects_test_dll/x64/Debug/test_server.dll'; //enter path
-    var objTestDllPath = path.join(objTestPath);
-
-    //Open dynamic library that contains C functions
-    final dylibTestServer = ffi.DynamicLibrary.open(testServerPath);
-    final dylibObjTestDll = ffi.DynamicLibrary.open(objTestDllPath); 
-
-    final portOpen = dylibObjTestDll.lookupFunction<Int64 Function(), int Function()>('port_open');
-    print(portOpen());
-
-
+    
     //simulate 
     for (int i = 0; i <= totalSteps; i++) {
       Future.delayed(Duration(milliseconds: i * delayMilliseconds), () {
@@ -59,6 +48,14 @@ class _LoadingDialogState extends State<LoadingDialog> {
         });
       });
     }
+
+    // create variables that contain paths to DLL
+    String objTestPath = 'C:/cnc_objects_test_dll/x64/Debug/test_server.dll'; //enter path
+    var objTestDllPath = path.join(objTestPath);
+    //Open dynamic library that contains C functions
+    final dylibObjTestDll = ffi.DynamicLibrary.open(objTestDllPath); 
+    // Look up the function pointer
+    final portOpen = dylibObjTestDll.lookupFunction<PortOpenNative, PortOpen>('port_open');
 
     
 
@@ -87,7 +84,7 @@ class _LoadingDialogState extends State<LoadingDialog> {
             if (_isLoading)
               const Text('Loading...')
             else
-              const Text('Loading complete'), // Show completion message when loading is complete
+              const Text('Loading complete' + portOpen()), // Show completion message when loading is complete
           ],
         ),
       ),
