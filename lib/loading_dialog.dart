@@ -49,10 +49,12 @@ class _LoadingDialogState extends State<LoadingDialog> {
       });
     }
 
+
+    // TODO: Try to call the port_open() method from the dll
     // create variables that contain paths to DLL
     String objTestPath = 'C:/cnc_objects_test_dll/x64/Debug/test_server.dll'; //enter path
     var objTestDllPath = path.join(objTestPath);
-    //Open dynamic library that contains C functions
+    // Open dynamic library that contains C functions
     final dylibObjTestDll = ffi.DynamicLibrary.open(objTestDllPath); 
     // Look up the function pointer
     final portOpen = dylibObjTestDll.lookupFunction<PortOpenNative, PortOpen>('port_open');
@@ -84,7 +86,7 @@ class _LoadingDialogState extends State<LoadingDialog> {
             if (_isLoading)
               const Text('Loading...')
             else
-              const Text('Loading complete' + portOpen()), // Show completion message when loading is complete
+              const Text('Loading complete'), // Show completion message when loading is complete
           ],
         ),
       ),
