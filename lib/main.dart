@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loading_bar/loadingDialog.dart';
+import 'package:loading_bar/loading_dialog.dart';
 //import 'dart:ffi' as ffi;
 //import 'dart:io' show Platform, Directory;
 //import 'package:path/path.dart' as path;

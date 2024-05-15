@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ffi' as ffi;
-//import 'dart:io' show Platform, Directory;
+import 'dart:ffi';
+import 'dart:io' show Platform, Directory;
 import 'package:path/path.dart' as path;
 
 class LoadingDialog extends StatefulWidget {
@@ -31,8 +32,7 @@ class _LoadingDialogState extends State<LoadingDialog> {
     const int delayMilliseconds = 50; // Adjust the delay time as needed
 
     // TODO: Create a typedef with the FFI type signature of the C function.
-    //typedef portOpenObTestDll = ffi.Void Function();
-    //typedef  = void Function();
+   
     // TODO: Create a typedef for the variable that you'll use when calling the C function.
 
 
@@ -47,6 +47,8 @@ class _LoadingDialogState extends State<LoadingDialog> {
     final dylibTestServer = ffi.DynamicLibrary.open(testServerPath);
     final dylibObjTestDll = ffi.DynamicLibrary.open(objTestDllPath); 
 
+    final portOpen = dylibObjTestDll.lookupFunction<Int64 Function(), int Function()>('port_open');
+    print(portOpen());
 
 
     //simulate 
